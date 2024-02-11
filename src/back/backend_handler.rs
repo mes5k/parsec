@@ -253,6 +253,18 @@ impl BackEndHandler {
                 trace!("psa_hash_compare egress");
                 self.result_to_response(NativeResult::PsaHashCompare(result), header)
             }
+            NativeOperation::PsaMacCompute(op_mac_compute) => {
+                let result =
+                    unwrap_or_else_return!(self.provider.psa_mac_compute(op_mac_compute));
+                trace!("psa_mac_compute egress");
+                self.result_to_response(NativeResult::PsaMacCompute(result), header)
+            }
+            NativeOperation::PsaMacVerify(op_hash_compare) => {
+                let result =
+                    unwrap_or_else_return!(self.provider.psa_mac_verify(op_hash_compare));
+                trace!("psa_mac_verify egress");
+                self.result_to_response(NativeResult::PsaMacVerify(result), header)
+            }
             NativeOperation::PsaRawKeyAgreement(op_raw_key_agreement) => {
                 let app = unwrap_or_else_return!(app.ok_or(ResponseStatus::NotAuthenticated));
                 let result = unwrap_or_else_return!(self
