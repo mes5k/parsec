@@ -11,7 +11,8 @@ publish = false
 
 [dependencies]
 serde = { version = "1.0.123", features = ["derive"] }
-parsec-client = { version = "0.16.0", features = ["testing", "spiffe-auth"] }
+#parsec-client = { version = "0.16.0", features = ["testing", "spiffe-auth"] }
+parsec-client = { path = "../../parsec-client-rust", features = ["testing", "spiffe-auth"] }
 log = "0.4.14"
 # Compatible version with crate rsa
 rand = "0.7.3"

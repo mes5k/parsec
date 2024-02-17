@@ -15,7 +15,7 @@ use parsec_interface::operations::{
     can_do_crypto, psa_aead_decrypt, psa_aead_encrypt, psa_asymmetric_decrypt,
     psa_asymmetric_encrypt, psa_destroy_key, psa_export_key, psa_export_public_key,
     psa_generate_key, psa_generate_random, psa_hash_compare, psa_hash_compute, psa_import_key,
-    psa_raw_key_agreement, psa_sign_hash, psa_verify_hash, psa_mac_compute, psa_mac_verify,
+    psa_mac_compute, psa_mac_verify, psa_raw_key_agreement, psa_sign_hash, psa_verify_hash,
 };
 use parsec_interface::operations::{list_clients, list_keys, list_providers::ProviderInfo};
 use parsec_interface::requests::{Opcode, ProviderId, ResponseStatus, Result};
@@ -313,18 +313,12 @@ impl Provide for Provider {
         self.psa_hash_compare_internal(op)
     }
 
-    fn psa_mac_compute(
-        &self,
-        op: psa_mac_compute::Operation,
-    ) -> Result<psa_mac_compute::Result> {
+    fn psa_mac_compute(&self, op: psa_mac_compute::Operation) -> Result<psa_mac_compute::Result> {
         trace!("psa_hash_compute ingress");
         self.psa_mac_compute_internal(op)
     }
 
-    fn psa_mac_verify(
-        &self,
-        op: psa_mac_verify::Operation,
-    ) -> Result<psa_mac_verify::Result> {
+    fn psa_mac_verify(&self, op: psa_mac_verify::Operation) -> Result<psa_mac_verify::Result> {
         trace!("psa_mac_verify ingress");
         self.psa_mac_verify_internal(op)
     }

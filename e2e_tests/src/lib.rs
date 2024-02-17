@@ -45,7 +45,7 @@ use parsec_client::core::interface::operations::list_keys::KeyInfo;
 use parsec_client::core::interface::operations::list_providers::ProviderInfo;
 use parsec_client::core::interface::operations::psa_algorithm::{
     Aead, AeadWithDefaultLengthTag, Algorithm, AsymmetricEncryption, AsymmetricSignature, Cipher,
-    Hash, KeyAgreement, RawKeyAgreement,
+    Hash, Mac, KeyAgreement, RawKeyAgreement,
 };
 use parsec_client::core::interface::operations::psa_key_attributes::{
     Attributes, EccFamily, Lifetime, Policy, Type, UsageFlags,
@@ -827,6 +827,18 @@ impl TestClient {
     pub fn hash_compare(&mut self, alg: Hash, input: &[u8], hash: &[u8]) -> Result<()> {
         self.basic_client
             .psa_hash_compare(alg, input, hash)
+            .map_err(convert_error)
+    }
+
+    pub fn mac_compute(&mut self, alg: Mac, key_name: &str, input: &[u8]) -> Result<Vec<u8>> {
+        self.basic_client
+            .psa_mac_compute(alg, key_name, input)
+            .map_err(convert_error)
+    }
+
+    pub fn mac_verify(&mut self, alg: Mac, key_name: &str, input: &[u8], mac: &[u8]) -> Result<()> {
+        self.basic_client
+            .psa_mac_verify(alg, key_name, input, mac)
             .map_err(convert_error)
     }
 

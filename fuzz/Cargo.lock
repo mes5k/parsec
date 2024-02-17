@@ -1076,7 +1076,7 @@ dependencies = [
  "libc",
  "log",
  "num",
- "parsec-interface",
+ "parsec-interface 0.29.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "spiffe",
  "url",
  "zeroize",
@@ -1094,6 +1094,24 @@ dependencies = [
  "parsec-client",
  "parsec-service",
  "toml",
+]
+
+[[package]]
+name = "parsec-interface"
+version = "0.29.1"
+dependencies = [
+ "bincode",
+ "derivative",
+ "log",
+ "num",
+ "num-derive",
+ "num-traits",
+ "prost",
+ "psa-crypto",
+ "secrecy",
+ "serde",
+ "uuid",
+ "zeroize",
 ]
 
 [[package]]
@@ -1130,7 +1148,7 @@ dependencies = [
  "libc",
  "log",
  "num-traits",
- "parsec-interface",
+ "parsec-interface 0.29.1",
  "picky-asn1",
  "picky-asn1-der",
  "picky-asn1-x509",

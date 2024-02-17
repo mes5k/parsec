@@ -39,8 +39,9 @@ use parsec_interface::operations::{
     list_opcodes, list_providers, ping, prepare_key_attestation, psa_aead_decrypt,
     psa_aead_encrypt, psa_asymmetric_decrypt, psa_asymmetric_encrypt, psa_cipher_decrypt,
     psa_cipher_encrypt, psa_destroy_key, psa_export_key, psa_export_public_key, psa_generate_key,
-    psa_generate_random, psa_hash_compare, psa_hash_compute, psa_mac_compute, psa_mac_verify, psa_import_key, psa_raw_key_agreement,
-    psa_sign_hash, psa_sign_message, psa_verify_hash, psa_verify_message,
+    psa_generate_random, psa_hash_compare, psa_hash_compute, psa_import_key, psa_mac_compute,
+    psa_mac_verify, psa_raw_key_agreement, psa_sign_hash, psa_sign_message, psa_verify_hash,
+    psa_verify_message,
 };
 use parsec_interface::requests::{ResponseStatus, Result};
 
@@ -329,19 +330,13 @@ pub trait Provide {
     }
 
     /// Execute a MacCompute operation.
-    fn psa_mac_compute(
-        &self,
-        _op: psa_mac_compute::Operation,
-    ) -> Result<psa_mac_compute::Result> {
+    fn psa_mac_compute(&self, _op: psa_mac_compute::Operation) -> Result<psa_mac_compute::Result> {
         trace!("psa_mac_compute ingress");
         Err(ResponseStatus::PsaErrorNotSupported)
     }
 
     /// Execute a MacVerify operation.
-    fn psa_mac_verify(
-        &self,
-        _op: psa_mac_verify::Operation,
-    ) -> Result<psa_mac_verify::Result> {
+    fn psa_mac_verify(&self, _op: psa_mac_verify::Operation) -> Result<psa_mac_verify::Result> {
         trace!("psa_mac_verify ingress");
         Err(ResponseStatus::PsaErrorNotSupported)
     }
