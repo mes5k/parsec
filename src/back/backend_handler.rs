@@ -254,12 +254,18 @@ impl BackEndHandler {
                 self.result_to_response(NativeResult::PsaHashCompare(result), header)
             }
             NativeOperation::PsaMacCompute(op_mac_compute) => {
-                let result = unwrap_or_else_return!(self.provider.psa_mac_compute(op_mac_compute));
+                let app = unwrap_or_else_return!(app.ok_or(ResponseStatus::NotAuthenticated));
+                let result = unwrap_or_else_return!(self
+                    .provider
+                    .psa_mac_compute(app.identity(), op_mac_compute));
                 trace!("psa_mac_compute egress");
                 self.result_to_response(NativeResult::PsaMacCompute(result), header)
             }
             NativeOperation::PsaMacVerify(op_mac_verify) => {
-                let result = unwrap_or_else_return!(self.provider.psa_mac_verify(op_mac_verify));
+                let app = unwrap_or_else_return!(app.ok_or(ResponseStatus::NotAuthenticated));
+                let result = unwrap_or_else_return!(self
+                    .provider
+                    .psa_mac_verify(app.identity(), op_mac_verify));
                 trace!("psa_mac_verify egress");
                 self.result_to_response(NativeResult::PsaMacVerify(result), header)
             }

@@ -35,6 +35,7 @@ mod generate_random;
 mod hash;
 mod key_agreement;
 pub(super) mod key_management;
+mod mac;
 
 const SUPPORTED_OPCODES: [Opcode; 16] = [
     Opcode::PsaGenerateKey,
@@ -313,14 +314,22 @@ impl Provide for Provider {
         self.psa_hash_compare_internal(op)
     }
 
-    fn psa_mac_compute(&self, op: psa_mac_compute::Operation) -> Result<psa_mac_compute::Result> {
+    fn psa_mac_compute(
+        &self,
+        application_identity: &ApplicationIdentity,
+        op: psa_mac_compute::Operation,
+    ) -> Result<psa_mac_compute::Result> {
         trace!("psa_hash_compute ingress");
-        self.psa_mac_compute_internal(op)
+        self.psa_mac_compute_internal(application_identity, op)
     }
 
-    fn psa_mac_verify(&self, op: psa_mac_verify::Operation) -> Result<psa_mac_verify::Result> {
+    fn psa_mac_verify(
+        &self,
+        application_identity: &ApplicationIdentity,
+        op: psa_mac_verify::Operation,
+    ) -> Result<psa_mac_verify::Result> {
         trace!("psa_mac_verify ingress");
-        self.psa_mac_verify_internal(op)
+        self.psa_mac_verify_internal(application_identity, op)
     }
 
     fn psa_raw_key_agreement(

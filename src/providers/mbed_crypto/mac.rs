@@ -1,18 +1,36 @@
 // Copyright 2020 Contributors to the Parsec project.
 // SPDX-License-Identifier: Apache-2.0
 use super::Provider;
-use parsec_interface::operations::{psa_mac_verify, psa_mac_compute};
+use crate::authenticators::ApplicationIdentity;
+use crate::key_info_managers::KeyIdentity;
+use parsec_interface::operations::{psa_mac_compute, psa_mac_verify};
 use parsec_interface::requests::{ResponseStatus, Result};
 use psa_crypto::operations::mac;
+use psa_crypto::types::key;
 
 impl Provider {
     pub(super) fn psa_mac_compute_internal(
         &self,
+        application_identity: &ApplicationIdentity,
         op: psa_mac_compute::Operation,
     ) -> Result<psa_mac_compute::Result> {
+        let key_identity = KeyIdentity::new(
+            application_identity.clone(),
+            self.provider_identity.clone(),
+            op.key_name.clone(),
+        );
+        let key_id = self.key_info_store.get_key_id(&key_identity)?;
+        let _guard = self
+            .key_handle_mutex
+            .lock()
+            .expect("Grabbing key handle mutex failed");
+        let id = key::Id::from_persistent_key_id(key_id)?;
+        let key_attributes = key::Attributes::from_key_id(id)?;
+        op.validate(key_attributes)?;
+
         let mut mac = vec![0u8];
 
-        match mac::mac_compute(&op.key_name, op.alg, &op.input, &mut mac) {
+        match mac::compute_mac(id, op.alg, &op.input, &mut mac) {
             Ok(mac_size) => {
                 mac.resize(mac_size, 0);
                 Ok(psa_mac_compute::Result { mac: mac.into() })
@@ -27,9 +45,26 @@ impl Provider {
 
     pub(super) fn psa_mac_verify_internal(
         &self,
+        application_identity: &ApplicationIdentity,
         op: psa_mac_verify::Operation,
     ) -> Result<psa_mac_verify::Result> {
-        match mac::mac_verify(&op.key_name, op.alg, &op.input, &op.mac) {
+        let key_identity = KeyIdentity::new(
+            application_identity.clone(),
+            self.provider_identity.clone(),
+            op.key_name.clone(),
+        );
+        let key_id = self.key_info_store.get_key_id(&key_identity)?;
+
+        let _guard = self
+            .key_handle_mutex
+            .lock()
+            .expect("Grabbing key handle mutex failed");
+
+        let id = key::Id::from_persistent_key_id(key_id)?;
+        let key_attributes = key::Attributes::from_key_id(id)?;
+        op.validate(key_attributes)?;
+
+        match mac::verify_mac(id, op.alg, &op.input, &op.mac) {
             Ok(()) => Ok(psa_mac_verify::Result),
             Err(error) => {
                 let error = ResponseStatus::from(error);

@@ -330,13 +330,21 @@ pub trait Provide {
     }
 
     /// Execute a MacCompute operation.
-    fn psa_mac_compute(&self, _op: psa_mac_compute::Operation) -> Result<psa_mac_compute::Result> {
+    fn psa_mac_compute(
+        &self,
+        _application_identity: &ApplicationIdentity,
+        _op: psa_mac_compute::Operation,
+    ) -> Result<psa_mac_compute::Result> {
         trace!("psa_mac_compute ingress");
         Err(ResponseStatus::PsaErrorNotSupported)
     }
 
     /// Execute a MacVerify operation.
-    fn psa_mac_verify(&self, _op: psa_mac_verify::Operation) -> Result<psa_mac_verify::Result> {
+    fn psa_mac_verify(
+        &self,
+        _application_identity: &ApplicationIdentity,
+        _op: psa_mac_verify::Operation,
+    ) -> Result<psa_mac_verify::Result> {
         trace!("psa_mac_verify ingress");
         Err(ResponseStatus::PsaErrorNotSupported)
     }
