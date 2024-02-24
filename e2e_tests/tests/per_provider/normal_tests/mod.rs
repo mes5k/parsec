@@ -17,3 +17,4 @@ mod key_agreement;
 mod key_attestation;
 mod key_attributes;
 mod ping;
+mod mac;
