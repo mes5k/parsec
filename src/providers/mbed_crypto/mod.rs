@@ -37,7 +37,7 @@ mod key_agreement;
 pub(super) mod key_management;
 mod mac;
 
-const SUPPORTED_OPCODES: [Opcode; 16] = [
+const SUPPORTED_OPCODES: [Opcode; 18] = [
     Opcode::PsaGenerateKey,
     Opcode::PsaDestroyKey,
     Opcode::PsaSignHash,
@@ -51,6 +51,8 @@ const SUPPORTED_OPCODES: [Opcode; 16] = [
     Opcode::PsaAeadDecrypt,
     Opcode::PsaHashCompare,
     Opcode::PsaHashCompute,
+    Opcode::PsaMacVerify,
+    Opcode::PsaMacCompute,
     Opcode::PsaRawKeyAgreement,
     Opcode::PsaGenerateRandom,
     Opcode::CanDoCrypto,

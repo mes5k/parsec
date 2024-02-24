@@ -8,8 +8,9 @@ use parsec_client::core::interface::requests::Opcode;
 #[test]
 fn mac_supported() {
     let mut client = TestClient::new();
+    println!("Provider: {}", client.provider());
     let oc = client.list_opcodes(client.provider());
-    println!("{:?}", oc);
+    println!("Supported OpCodes: {:?}", oc);
     assert!(client.is_operation_supported(Opcode::PsaMacCompute));
     assert!(client.is_operation_supported(Opcode::PsaMacVerify));
 }
