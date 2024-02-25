@@ -28,10 +28,8 @@ impl Provider {
         let key_attributes = key::Attributes::from_key_id(id)?;
         op.validate(key_attributes)?;
 
-        // ????????? Is this right?  How should I otherwise estimate
-        // the vector size. If the vector isn't big enough mbedtls
-        // complains.
-        let mut mac = vec![0u8;key_attributes.bits/8];
+        let mac_len = key_attributes.mac_length(op.alg)?;
+        let mut mac = vec![0u8; mac_len];
 
         match mac::compute_mac(id, op.alg, &op.input, &mut mac) {
             Ok(mac_size) => {
